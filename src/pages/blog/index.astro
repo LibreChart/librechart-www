@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+
+// Drafts stay visible while writing (astro dev) and drop out of the build.
+const posts = (await getCollection('blog', ({ data }) => (import.meta.env.PROD ? !data.draft : true)))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<PageLayout
+  title="Blog — LibreChart"
+  description="Field notes from building and running LibreChart, a free offline-first EMR for medical mission clinics."
+  heading="Blog"
+  lede="Field notes from building and running an EMR that has to work where the internet doesn't."
+>
+  {posts.length === 0 && <p>No posts yet.</p>}
+
+  <ul class="post-list">
+    {
+      posts.map((post) => (
+        <li>
+          <article>
+            <p class="meta">
+              <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+              {post.data.draft && <span class="draft">Draft</span>}
+            </p>
+            <h2><a href={`/blog/${post.id}`}>{post.data.title}</a></h2>
+            <p class="desc">{post.data.description}</p>
+          </article>
+        </li>
+      ))
+    }
+  </ul>
+</PageLayout>
+
+<style>
+  .post-list { list-style: none; margin: 0; padding: 0; max-width: 68ch; display: grid; gap: 40px; }
+  .meta { color: var(--muted); font-size: 0.92rem; margin: 0 0 8px; display: flex; gap: 10px; align-items: center; }
+  .draft {
+    background: var(--amber-bg); color: #8a4d05; font-weight: 700;
+    font-size: 0.76rem; letter-spacing: 0.04em; text-transform: uppercase;
+    border-radius: 999px; padding: 2px 9px;
+  }
+  .post-list h2 {
+    font-family: var(--font-display);
+    font-size: 1.55rem; font-weight: 700; letter-spacing: -0.01em; margin: 0;
+  }
+  .post-list h2 a { color: var(--ink); }
+  .post-list h2 a:hover { color: var(--chart-blue); text-decoration: none; }
+  .desc { margin: 10px 0 0; color: var(--muted); }
+</style>

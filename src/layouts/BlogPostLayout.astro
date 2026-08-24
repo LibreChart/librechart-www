@@ -1,0 +1,68 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PageLayout from './PageLayout.astro';
+import '../styles/prose.css';
+
+interface Props { post: CollectionEntry<'blog'> }
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, author, tags, draft } = post.data;
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<PageLayout title={`${title} — LibreChart`} description={description} indexable={!draft}>
+  <article>
+    <header class="post-head">
+      {draft && <p class="draft-flag">Draft — not published</p>}
+      <h1>{title}</h1>
+      <p class="byline">
+        <span>{author}</span>
+        <span aria-hidden="true">·</span>
+        <time datetime={pubDate.toISOString()}>{fmt(pubDate)}</time>
+        {updatedDate && <span aria-hidden="true">·</span>}
+        {updatedDate && <span>updated {fmt(updatedDate)}</span>}
+      </p>
+      {
+        tags.length > 0 && (
+          <ul class="tags">
+            {tags.map((t) => <li>{t}</li>)}
+          </ul>
+        )
+      }
+    </header>
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    <p class="back"><a href="/blog">← All posts</a></p>
+  </article>
+</PageLayout>
+
+<style>
+  article { max-width: 68ch; }
+  .post-head { padding-bottom: 26px; border-bottom: 1px solid var(--border); margin-bottom: 34px; }
+  .post-head h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  .byline { margin-top: 14px; color: var(--muted); font-size: 0.95rem; display: flex; flex-wrap: wrap; gap: 8px; }
+  .draft-flag {
+    display: inline-block; margin: 0 0 14px;
+    background: var(--amber-bg); color: #8a4d05;
+    border-left: 3px solid var(--amber);
+    padding: 6px 12px; font-size: 0.9rem; font-weight: 600;
+  }
+  .tags { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; }
+  .tags li {
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase;
+    color: var(--vital-teal-dark); background: #e6f4f2;
+    border-radius: 999px; padding: 4px 11px;
+  }
+  .back { margin-top: 52px; padding-top: 22px; border-top: 1px solid var(--border); }
+  .back a { color: var(--chart-blue); font-weight: 600; }
+</style>

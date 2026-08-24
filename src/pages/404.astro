@@ -1,0 +1,22 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+---
+
+<PageLayout
+  title="Page not found — LibreChart"
+  description="That page doesn't exist."
+  heading="Page not found"
+  lede="That link points somewhere that doesn't exist. It may have moved."
+  indexable={false}
+>
+  <ul class="links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="https://github.com/LibreChart/LibreChart">Source on GitHub</a></li>
+  </ul>
+</PageLayout>
+
+<style>
+  .links { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .links a { color: var(--chart-blue); font-weight: 600; font-size: 1.05rem; }
+</style>

@@ -35,6 +35,37 @@ export default defineConfig({
   // "SESSION" KV namespace we would then have to provision. Opt out.
   session: false,
 
+  security: {
+    // Astro computes SHA-256 hashes for the scripts and styles it emits and
+    // publishes them in a <meta http-equiv="content-security-policy">.
+    //
+    // This is the ONLY CSP on the site. A second policy in public/_headers
+    // would not add protection - browsers enforce the intersection of all
+    // policies, so a header `script-src 'self'` would block Astro's hashed
+    // inline script regardless of what the meta allows. Hashes also beat the
+    // 'unsafe-inline' that scoped component styles would otherwise force.
+    //
+    // frame-ancestors is ignored in a meta policy, so X-Frame-Options: DENY in
+    // public/_headers covers clickjacking instead.
+    csp: {
+      algorithm: 'SHA-256',
+      directives: [
+        "default-src 'self'",
+        "img-src 'self' data:",
+        "font-src 'self'",
+        "connect-src 'self'",
+        "form-action 'self'",
+        "base-uri 'self'",
+        "object-src 'none'",
+        // Turnstile's widget iframe (B6).
+        'frame-src https://challenges.cloudflare.com',
+      ],
+      scriptDirective: {
+        resources: ["'self'", 'https://challenges.cloudflare.com'],
+      },
+    },
+  },
+
   prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
 
   // NOTE: the `env.schema` block (PUBLIC_TURNSTILE_SITE_KEY, TURNSTILE_SECRET_KEY,

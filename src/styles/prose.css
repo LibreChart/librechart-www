@@ -1,0 +1,50 @@
+/* Long-form body copy for blog posts and docs pages. */
+.prose {
+  max-width: 68ch;
+  font-size: 1.06rem;
+  line-height: 1.72;
+  color: var(--ink);
+}
+.prose > * + * { margin-top: 1.15em; }
+.prose h2 {
+  font-family: var(--font-display);
+  font-size: 1.72rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-top: 2.2em;
+}
+.prose h3 {
+  font-family: var(--font-ui);
+  font-size: 1.18rem;
+  font-weight: 700;
+  margin-top: 1.9em;
+}
+.prose a { color: var(--chart-blue); text-decoration: underline; text-underline-offset: 2px; }
+.prose ul, .prose ol { padding-left: 1.35em; }
+.prose li + li { margin-top: 0.45em; }
+.prose blockquote {
+  border-left: 3px solid var(--vital-teal);
+  padding-left: 20px;
+  color: var(--muted);
+  font-style: italic;
+}
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--mist);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 5px;
+}
+.prose pre {
+  background: var(--ink);
+  color: #dbe6ef;
+  padding: 18px 20px;
+  border-radius: var(--radius);
+  overflow-x: auto;
+}
+.prose pre code { background: none; border: 0; padding: 0; color: inherit; }
+.prose img { max-width: 100%; height: auto; border-radius: var(--radius); }
+.prose table { width: 100%; border-collapse: collapse; }
+.prose th, .prose td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+.prose th { font-weight: 700; }

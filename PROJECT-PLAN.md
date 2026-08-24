@@ -409,3 +409,70 @@ Finally: Turnstile renders with the production sitekey on a hostname matching it
 - **Confirm `LibreChart/LibreChart` is public** (A9.3). It's the homepage's primary CTA.
 - **Real screenshots.** The homepage uses a hand-built HTML mockup of the chart UI, which is fine in context. Real de-identified captures would be stronger but need a demo instance — Tier 2, and a prerequisite for any dedicated `/screenshots` page.
 - **Licence for the site repo** is your call: GPL-2.0-or-later for consistency with the EMR, or MIT since this is marketing code, not the product.
+
+---
+
+# Implementation notes (B0–B5 as built)
+
+Where reality differed from the plan above. The plan text is left unedited; this
+section is the correction.
+
+## Corrected by measurement
+
+- **Source Serif 4: ship the `opsz` file (122 KB), not `wght` (50 KB).** The plan
+  argued the optical-size axis "buys almost nothing at heading sizes." Measured
+  with both fonts fully loaded, pinning `opsz` renders headings **~11% wider**,
+  costing the h1 and two h2s an extra line at 480px. Fidelity wins; the design was
+  authored against the optical-size version.
+
+- **CSP is emitted by Astro, not by `public/_headers`.** Astro 7's
+  `security.csp` hashes the scripts and styles it emits. Two policies would not
+  add up — browsers enforce the *intersection*, so a header `script-src 'self'`
+  blocks Astro's own hashed inline script no matter what the meta allows. Astro
+  owns the policy; `_headers` keeps `X-Frame-Options: DENY`, because
+  `frame-ancestors` is ignored in a meta policy. Bonus: no `'unsafe-inline'`
+  anywhere, which the plan's hand-written policy required for scoped styles.
+
+- **`session: false`.** Left at its default the Cloudflare adapter auto-binds a
+  `SESSION` KV namespace. This site has no sessions; opting out keeps the deploy
+  binding-free and removes a namespace from A7.
+
+## Corrected by the toolchain
+
+- **`wrangler.jsonc`**: `main` is `@astrojs/cloudflare/entrypoints/server`, and
+  the adapter rewrites `assets.directory` at deploy time via a generated
+  `dist/client/wrangler.json`. Not `./dist/_worker.js/index.js`.
+  `nodejs_compat` is not needed; the adapter picks `global_fetch_strictly_public`.
+- **`z` comes from `astro/zod`**, not `astro:content`. Zod 4 — use `z.email()`,
+  not `z.string().email()`.
+- **Trailing-slash canonicalisation returns 307, not 301** (`html_handling:
+  drop-trailing-slash`). Adjust the verification step's expectation.
+
+## The cascade trap (the expensive one)
+
+Six elements carry `.wrap` alongside a block class. At ≤480px the global
+`.wrap{padding:0 18px}` is meant to win on source order — both selectors are
+0-1-0. Moving a `padding` declaration for one of those classes into a
+component's scoped `<style>` rewrites it as `.x.astro-HASH` (0-2-0), which beats
+`.wrap` and strips side gutters on phones. **Padding for any `.wrap`-combined
+class stays in `global.css`**; only layout properties are safe to scope. See the
+CASCADE TRAP comment in `src/styles/global.css`.
+
+This cost three separate regressions during the port, none of which produced a
+build error or a console warning. `scripts/compare.sh` caught all three.
+
+## Still to do
+
+- **B6** — contact form. Needs the A4/A5/A7 keys. `frame-src`/`script-src`
+  already allow `challenges.cloudflare.com`.
+- **`/docs/getting-started`** — the header's "Docs" link currently points at the
+  GitHub README.
+- **Blog posts are `draft: true`.** Two seed posts are written but unpublished:
+  they are drafts under Aaron's byline making factual claims about a real
+  mission, so they need his review before `draft: false`.
+- **Web Analytics beacon** — needs the A9 token.
+- **Button / Logo / icon components** — the GitHub icon path appears 4×, the
+  checkmark 6×, the logo mark 3×. Deferred deliberately: the footer recolours
+  the logo via `.footer .logo-lockup`, which stops working once the logo moves
+  into its own component, so that extraction should introduce a `variant` prop
+  at the same time.
