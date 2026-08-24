@@ -1,0 +1,43 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "librechart-www",
+	"compatibility_date": "2026-08-24",
+	"compatibility_flags": ["global_fetch_strictly_public"],
+
+	// Resolved from the adapter package, NOT ./dist/_worker.js/index.js.
+	"main": "@astrojs/cloudflare/entrypoints/server",
+
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS",
+		// One canonical URL shape; mirrors trailingSlash:'never' in astro.config.mjs.
+		"html_handling": "drop-trailing-slash",
+		// Serve the built 404.astro rather than a bare Workers error.
+		"not_found_handling": "404-page"
+	},
+
+	"observability": {
+		"enabled": true
+	}
+
+	// DEFERRED — do not uncomment until the referenced step is done:
+	//
+	// B6 — contact form config:
+	// "vars": {
+	//   "CONTACT_TO": "you@example.com",
+	//   "CONTACT_FROM": "LibreChart <site@librechart.org>"
+	// },
+	//
+	// A7 — paste the id printed by `wrangler kv namespace create CONTACT_KV`.
+	// A placeholder id here will fail the deploy, so it stays commented out:
+	// "kv_namespaces": [
+	//   { "binding": "CONTACT_KV", "id": "<from A7>" }
+	// ],
+	//
+	// A8 — custom domains. These fail to deploy until the zone is in the
+	// account, so they are added only after the domain is registered:
+	// "routes": [
+	//   { "pattern": "librechart.org", "custom_domain": true },
+	//   { "pattern": "www.librechart.org", "custom_domain": true }
+	// ]
+}
