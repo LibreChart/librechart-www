@@ -1,0 +1,61 @@
+---
+/**
+ * The three proof-point cards. 780px collapse travels with .pillars.
+ */
+---
+
+<section id="features" aria-labelledby="features-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Why LibreChart</p>
+      <h2 id="features-title">A record system that fits the way field clinics actually work.</h2>
+      <p>No subscriptions, no vendor lock-in, and no assumption that there's a reliable internet connection. LibreChart is designed for the places where those things can't be taken for granted.</p>
+    </div>
+
+    <div class="pillars">
+      <article class="pillar">
+        <div class="pillar-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="12" rx="2"/><path d="M6 11h.01M6 15h6"/><path d="M18 3v2M18 9V7"/></svg>
+        </div>
+        <h3>Offline-first</h3>
+        <p>Runs entirely on a local area network. No cloud service to reach, no external dependency to fail — the clinic's own laptop or server holds every record, and charting continues even with the internet down.</p>
+      </article>
+
+      <article class="pillar">
+        <div class="pillar-icon teal" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m0 8v3a2 2 0 0 0 2 2h3m8-18h3a2 2 0 0 1 2 2v3m0 8v3a2 2 0 0 1-2 2h-3"/><path d="m9 15 3-3 3 3M9 9l3 3"/></svg>
+        </div>
+        <h3>Open source</h3>
+        <p>Licensed GPL-2.0. Read the code, adapt it to your protocols, and contribute improvements back. What runs your clinic is fully inspectable — nothing is hidden behind a paywall or a proprietary black box.</p>
+      </article>
+
+      <article class="pillar">
+        <div class="pillar-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
+        </div>
+        <h3>Built for field clinics</h3>
+        <p>Role-based stations move each patient from intake to consult to pharmacy. Fast patient lookup finds a returning visitor in seconds, and every encounter is tracked as a dated visit you can reopen later.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .pillar{
+    background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);
+    padding:30px 28px;box-shadow:var(--shadow-sm);
+  }
+  .pillar-icon{
+    width:52px;height:52px;border-radius:13px;display:grid;place-items:center;margin-bottom:20px;
+    background:#EAF2F8;color:var(--chart-blue);
+  }
+  .pillar-icon.teal{background:#E3F2EF;color:var(--vital-teal-dark)}
+  .pillar-icon svg{width:26px;height:26px}
+  .pillar h3{font-size:1.35rem;font-weight:600;margin-bottom:10px}
+  .pillar p{color:var(--muted);font-size:1rem}
+
+  @media (max-width: 780px) {
+    .pillars{grid-template-columns:1fr}
+  }
+</style>

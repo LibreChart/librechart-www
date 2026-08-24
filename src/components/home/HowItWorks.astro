@@ -1,0 +1,75 @@
+---
+/**
+ * Four-step setup. .steps goes 4 -> 2 cols at 920px, 1 col at 560px.
+ */
+---
+
+<section id="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">How it works</p>
+      <h2 id="how-title">Stand up a working EMR in an afternoon.</h2>
+      <p>LibreChart installs on ordinary hardware and serves the whole clinic over its own network. No servers to rent, no accounts to create — the data never leaves the building.</p>
+    </div>
+
+    <div class="steps">
+      <article class="step">
+        <div class="step-num" aria-hidden="true">1</div>
+        <h3>Install on a laptop or local server</h3>
+        <p>Set up LibreChart on a single machine at the clinic. It becomes the host that stores records and serves the application.</p>
+      </article>
+      <article class="step">
+        <div class="step-num" aria-hidden="true">2</div>
+        <h3>Connect clinic devices to the LAN</h3>
+        <p>Staff open the app in a browser over the local Wi-Fi or wired network — tablets at intake, laptops at each consult and pharmacy station.</p>
+      </article>
+      <article class="step">
+        <div class="step-num" aria-hidden="true">3</div>
+        <h3>Register patients and chart visits</h3>
+        <p>Enrol a patient once, then track every encounter as a dated visit that moves through the clinic's role-based stations.</p>
+      </article>
+      <article class="step">
+        <div class="step-num" aria-hidden="true">4</div>
+        <h3>Data stays on site</h3>
+        <p>Records live on the clinic's own hardware. Nothing is uploaded to a third party, and back-ups are yours to keep and control.</p>
+      </article>
+    </div>
+
+    <div class="tech-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 16-4-4 4-4M16 8l4 4-4 4M14.5 4l-5 16"/></svg>
+      <p><strong>For the technical team:</strong> LibreChart is built on Drupal and ships with a <code>DDEV</code> configuration for local development, so the same stack runs on a maintainer's laptop and on the clinic server. Standard PHP and MySQL/MariaDB underneath — nothing exotic to maintain.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;counter-reset:step}
+  .step{position:relative;padding-top:8px}
+  .step-num{
+    width:44px;height:44px;border-radius:11px;background:var(--chart-blue);color:#fff;
+    font-family:var(--font-display);font-weight:700;font-size:1.35rem;
+    display:grid;place-items:center;margin-bottom:18px;
+  }
+  .step:nth-child(2) .step-num{background:var(--vital-teal-dark)}
+  .step:nth-child(3) .step-num{background:var(--chart-blue)}
+  .step:nth-child(4) .step-num{background:var(--vital-teal-dark)}
+  .step h3{font-size:1.15rem;font-weight:600;margin-bottom:8px}
+  .step p{color:var(--muted);font-size:.98rem}
+  .tech-note{
+    margin-top:44px;background:var(--mist);border:1px solid var(--border);border-radius:12px;
+    padding:18px 22px;display:flex;align-items:flex-start;gap:14px;color:var(--muted);font-size:.97rem;
+  }
+  .tech-note svg{width:22px;height:22px;color:var(--chart-blue);flex:none;margin-top:2px}
+  .tech-note code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em;
+    background:#fff;border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:var(--ink);
+  }
+
+  @media (max-width: 920px) {
+    .steps{grid-template-columns:repeat(2,1fr)}
+  }
+
+  @media (max-width: 560px) {
+    .steps{grid-template-columns:1fr}
+  }
+</style>

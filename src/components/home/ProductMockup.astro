@@ -1,0 +1,180 @@
+---
+/**
+ * The hand-built chart-UI mockup. Largest CSS block on the page; owns the
+ * browser chrome frame and the EMR app inside it.
+ */
+---
+
+<section class="product" aria-labelledby="product-title">
+  <div class="wrap product-grid">
+    <div class="product-copy">
+      <p class="kicker">The chart</p>
+      <h2 id="product-title">Everything about a patient on one calm, legible screen.</h2>
+      <p>Open a chart and the essentials are already in front of you — identity, allergies, latest vitals, and the running visit note. Clinical alerts stand out without shouting, so a critical allergy is impossible to miss during a busy triage line.</p>
+    </div>
+
+    <div class="browser" role="img" aria-label="Screenshot of the LibreChart electronic medical record showing the chart for patient Amara Diallo, including an amber penicillin allergy alert, current vitals, and a visit note.">
+      <div class="browser-bar">
+        <div class="browser-dots"><i></i><i></i><i></i></div>
+        <div class="browser-url">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          <span>clinic.lan/patients/</span><span class="path">LC-004417</span>
+        </div>
+      </div>
+
+      <div class="emr">
+        <div class="emr-topbar">
+          <span class="emr-brand">
+            <svg class="logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
+              <rect x="33" y="11" width="15" height="8" rx="2.5" fill="#fff" opacity=".9"/>
+              <rect x="10" y="16" width="44" height="33" rx="5.5" fill="#fff" opacity=".9"/>
+              <path d="M2 32 H19.5 L22.5 32 L25 28.2 L27 32 L29.5 32 L31 37.5 L33.2 19 L35.4 40 L37 32 L40 32 L42.5 27.5 L45 32 H62"
+                    fill="none" stroke="#0E8C7F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="wm"><span>Libre</span><b>Chart</b></span>
+          </span>
+          <span class="emr-station">Station: Consult</span>
+        </div>
+
+        <div class="emr-patient">
+          <div class="emr-avatar" aria-hidden="true">AD</div>
+          <div>
+            <div class="name">Amara Diallo</div>
+            <div class="meta"><b>F</b> · <b>34</b> · ID <b>LC-004417</b> · Last seen 12 Jul 2026</div>
+          </div>
+        </div>
+
+        <div class="emr-tabs" role="tablist" aria-label="Chart sections">
+          <span class="emr-tab active" role="tab" aria-selected="true">Overview</span>
+          <span class="emr-tab" role="tab" aria-selected="false">Visits</span>
+          <span class="emr-tab" role="tab" aria-selected="false">Vitals</span>
+          <span class="emr-tab" role="tab" aria-selected="false">Meds</span>
+        </div>
+
+        <div class="emr-body">
+          <div class="alert" role="note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <div>
+              <div class="a-title">Allergy: Penicillin — severe</div>
+              <div class="a-text">Documented anaphylaxis, 2023. Do not prescribe beta-lactam antibiotics.</div>
+            </div>
+          </div>
+
+          <div class="emr-cards">
+            <div class="card">
+              <h4>Vitals <span class="stamp">Today · 08:42</span></h4>
+              <div class="vitals">
+                <div class="vital"><div class="v-label">Blood pressure</div><div class="v-value">118/76 <small>mmHg</small></div></div>
+                <div class="vital"><div class="v-label">Heart rate</div><div class="v-value">82 <small>bpm</small></div></div>
+                <div class="vital"><div class="v-label">Temp</div><div class="v-value">37.4 <small>°C</small></div></div>
+                <div class="vital"><div class="v-label">SpO₂</div><div class="v-value">98 <small>%</small></div></div>
+              </div>
+            </div>
+
+            <div class="card note">
+              <h4>Visit note <span class="stamp">Consult · Dr. Okoye</span></h4>
+              <p class="n-line"><b>Complaint:</b> Cough and low-grade fever, 4 days.</p>
+              <p class="n-line"><b>Exam:</b> Chest clear, no respiratory distress. Throat mildly injected.</p>
+              <p class="n-line"><b>Plan:</b> Suspect viral URTI. Azithromycin (penicillin allergy noted). Fluids, rest, review in 3 days if not improving.</p>
+              <p class="n-sig">Signed 14 Jul 2026 · Consult station · saved to clinic.lan</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .product{background:var(--mist);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .product-grid{display:grid;grid-template-columns:1fr;gap:44px;align-items:center}
+  .product-copy{max-width:640px;margin:0 auto;text-align:center}
+  .product-copy .kicker{font-size:14px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--chart-blue);margin-bottom:14px}
+  .product-copy h2{font-size:clamp(1.9rem,3.6vw,2.5rem);font-weight:700}
+  .product-copy p{color:var(--muted);margin-top:16px;font-size:1.1rem}
+  
+  /* Browser chrome frame */
+  .browser{
+    max-width:960px;margin:0 auto;background:#fff;border:1px solid var(--border);
+    border-radius:14px;box-shadow:var(--shadow-md);overflow:hidden;
+  }
+  .browser-bar{
+    display:flex;align-items:center;gap:14px;padding:12px 16px;
+    background:#EDF2F6;border-bottom:1px solid var(--border);
+  }
+  .browser-dots{display:flex;gap:7px}
+  .browser-dots i{width:12px;height:12px;border-radius:50%;background:#CBD7E0;display:block}
+  .browser-url{
+    flex:1;background:#fff;border:1px solid var(--border);border-radius:7px;
+    padding:6px 12px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:7px;
+    font-family:var(--font-ui);
+  }
+  .browser-url svg{width:13px;height:13px;color:var(--vital-teal);flex:none}
+  .browser-url .path{color:var(--ink)}
+  
+  /* EMR app inside the browser */
+  .emr{background:#fff}
+  .emr-topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:14px 20px;border-bottom:1px solid var(--border);background:var(--chart-blue);color:#fff;
+  }
+  .emr-brand{display:inline-flex;align-items:center;gap:9px}
+  .emr-brand .logo-mark{width:26px;height:26px}
+  .emr-brand .wm{font-family:var(--font-ui);font-size:15px;color:#fff}
+  .emr-brand .wm b{font-weight:700}
+  .emr-brand .wm span{font-weight:400}
+  .emr-station{font-size:12.5px;font-weight:600;background:rgba(255,255,255,.16);padding:5px 11px;border-radius:20px;color:#fff}
+  
+  .emr-patient{display:flex;align-items:center;gap:16px;padding:18px 20px;border-bottom:1px solid var(--border)}
+  .emr-avatar{
+    width:48px;height:48px;border-radius:50%;flex:none;background:#E3F2EF;color:var(--vital-teal-dark);
+    display:grid;place-items:center;font-weight:700;font-size:17px;font-family:var(--font-ui);
+  }
+  .emr-patient .name{font-family:var(--font-display);font-weight:700;font-size:1.25rem;color:var(--ink)}
+  .emr-patient .meta{font-size:13.5px;color:var(--muted);margin-top:2px}
+  .emr-patient .meta b{color:var(--ink);font-weight:600}
+  
+  .emr-tabs{display:flex;gap:4px;padding:0 20px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+  .emr-tab{
+    padding:12px 14px;font-size:14px;font-weight:600;color:var(--muted);
+    border-bottom:2.5px solid transparent;margin-bottom:-1px;
+  }
+  .emr-tab.active{color:var(--chart-blue);border-bottom-color:var(--chart-blue)}
+  
+  .emr-body{padding:20px;background:var(--mist)}
+  
+  .alert{
+    display:flex;align-items:flex-start;gap:12px;
+    background:var(--amber-bg);border:1px solid #F3D6A8;border-left:4px solid var(--amber);
+    border-radius:10px;padding:13px 16px;margin-bottom:18px;
+  }
+  .alert svg{width:20px;height:20px;color:var(--amber);flex:none;margin-top:1px}
+  .alert .a-title{font-weight:700;color:#8A4A05;font-size:14px}
+  .alert .a-text{font-size:13.5px;color:#7A4405;margin-top:2px}
+  
+  .emr-cards{display:grid;grid-template-columns:1fr 1.35fr;gap:16px}
+  .card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+  .card h4{
+    margin:0 0 12px;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted);display:flex;align-items:center;justify-content:space-between;
+  }
+  .card h4 .stamp{font-weight:600;letter-spacing:0;text-transform:none;color:var(--muted);font-size:11.5px}
+  
+  .vitals{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+  .vital .v-label{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+  .vital .v-value{font-family:var(--font-display);font-weight:700;font-size:1.35rem;color:var(--ink);line-height:1.1;margin-top:2px}
+  .vital .v-value small{font-family:var(--font-ui);font-size:.72rem;font-weight:600;color:var(--muted)}
+  
+  .note p{font-size:14px;color:var(--ink);line-height:1.6}
+  .note .n-line{margin-bottom:9px}
+  .note .n-line b{font-weight:700;color:var(--ink)}
+  .note .n-sig{margin-top:12px;padding-top:11px;border-top:1px dashed var(--border);font-size:12.5px;color:var(--muted)}
+
+  @media (max-width: 780px) {
+    .emr-cards{grid-template-columns:1fr}
+  }
+
+  @media (max-width: 480px) {
+    .browser-url{font-size:11px}
+  }
+</style>
