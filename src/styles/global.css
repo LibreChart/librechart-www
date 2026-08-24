@@ -69,27 +69,12 @@ a:focus-visible,button:focus-visible,.btn:focus-visible{
 .btn svg{width:1.15em;height:1.15em;flex:none}
 
 /* ---------- Nav ---------- */
-.nav{
-  position:sticky;top:0;z-index:100;
-  background:rgba(255,255,255,.92);
-  backdrop-filter:saturate(1.4) blur(10px);
-  border-bottom:1px solid var(--border);
-}
-.nav-inner{display:flex;align-items:center;justify-content:space-between;height:70px}
 .logo-lockup{display:inline-flex;align-items:center;gap:11px;color:var(--ink)}
 .logo-lockup:hover{text-decoration:none}
 .logo-mark{width:38px;height:38px;flex:none}
 .wordmark{font-family:var(--font-ui);font-size:22px;letter-spacing:-.01em;color:var(--ink)}
 .wordmark .w-libre{font-weight:400}
 .wordmark .w-chart{font-weight:700}
-
-.nav-links{display:flex;align-items:center;gap:30px;list-style:none;margin:0;padding:0}
-.nav-links a{color:var(--muted);font-weight:500;font-size:16px}
-.nav-links a:hover{color:var(--chart-blue);text-decoration:none}
-.nav-right{display:flex;align-items:center;gap:18px}
-
-.nav-toggle{display:none;background:none;border:1.5px solid var(--border);border-radius:9px;padding:8px;cursor:pointer;color:var(--ink)}
-.nav-toggle svg{width:22px;height:22px}
 
 /* ---------- Hero ---------- */
 .hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#fff 0%,var(--mist) 100%);border-bottom:1px solid var(--border)}
@@ -259,23 +244,18 @@ section{padding:84px 0}
 .lic-list li{display:flex;align-items:flex-start;gap:10px;font-size:.96rem;color:var(--ink)}
 .lic-list svg{width:18px;height:18px;color:var(--vital-teal);flex:none;margin-top:2px}
 
-/* ---------- Footer ---------- */
-.footer{background:var(--ink);color:#B7C6D4}
-.footer-inner{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding:64px 0 44px}
-.footer .logo-lockup{color:#fff}
-.footer .wordmark{color:#fff}
-.footer .foot-tag{margin-top:16px;color:#94A8B8;font-size:.96rem;max-width:320px}
-.footer h5{font-family:var(--font-ui);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7C93A5;margin:0 0 16px}
-.footer ul{list-style:none;margin:0;padding:0;display:grid;gap:11px}
-.footer ul a{color:#B7C6D4;font-size:.98rem}
-.footer ul a:hover{color:#fff;text-decoration:none}
-.footer-bottom{
-  border-top:1px solid #2A415A;padding:22px 0 40px;display:flex;flex-wrap:wrap;gap:14px;
-  align-items:center;justify-content:space-between;color:#7C93A5;font-size:.9rem;
-}
-.footer-bottom a{color:#B7C6D4}
-.footer-bottom .gh{display:inline-flex;align-items:center;gap:8px}
-.footer-bottom .gh svg{width:18px;height:18px}
+/* CASCADE TRAP - read before extracting another component.
+   Several elements carry `.wrap` alongside a block class:
+   .nav-inner .hero-inner .product-grid .community-inner .footer-inner .footer-bottom
+   At <=480px the global `.wrap{padding:0 18px}` is meant to win on source order,
+   both selectors being 0-1-0. Moving a `padding` declaration for one of those
+   classes into a component's scoped <style> rewrites it as `.x.astro-HASH`
+   (0-2-0), which beats `.wrap` and strips the side gutters on phones.
+   So: padding for any .wrap-combined class stays HERE. Only layout properties
+   (display/grid/flex/gap) are safe to scope. .hero-inner is the one still
+   pending - it has `padding:88px 0 96px` and the same exposure. */
+.footer-inner{padding:64px 0 44px}
+.footer-bottom{padding:22px 0 40px}
 
 /* ---------- ECG animation ---------- */
 .ecg-trace{
@@ -295,21 +275,11 @@ section{padding:84px 0}
 @media (max-width:780px){
   .pillars{grid-template-columns:1fr}
   .emr-cards{grid-template-columns:1fr}
-  .nav-links,.nav-right .btn-desktop{display:none}
-  .nav-toggle{display:inline-flex}
-  .nav.open .nav-links{
-    display:flex;position:absolute;top:70px;left:0;right:0;flex-direction:column;gap:0;
-    background:#fff;border-bottom:1px solid var(--border);padding:8px 0;box-shadow:var(--shadow-md);
-  }
-  .nav.open .nav-links li{width:100%}
-  .nav.open .nav-links a{display:block;padding:13px 24px}
-  .nav.open .nav-links a:hover{background:var(--mist)}
 }
 @media (max-width:560px){
   section{padding:60px 0}
   .hero-inner{padding:60px 0 68px}
   .steps{grid-template-columns:1fr}
-  .footer-inner{grid-template-columns:1fr;gap:32px}
   .hero-ctas .btn,.community-ctas .btn{flex:1 1 auto;justify-content:center}
 }
 @media (max-width:480px){
