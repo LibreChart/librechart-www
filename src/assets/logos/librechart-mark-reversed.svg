@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LibreChart mark, single-color white">
+  <!-- Single-color white mark for dark backgrounds. Card and tab knock the ECG trace out via a
+       mask so the trace reads as a clean gap; baseline extends past both card edges. -->
+  <title>LibreChart mark (reversed)</title>
+  <defs>
+    <mask id="ecg-knockout-rev">
+      <rect x="0" y="0" width="64" height="64" fill="#FFFFFF"/>
+      <path d="M4 33 H21 L23 30.5 L25 33 H29 L30.5 36.5 L32 17 L33.5 41 L35 33 H38 L40 29 L42 33 H60"
+            fill="none" stroke="#000000" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </mask>
+  </defs>
+  <g fill="#FFFFFF" mask="url(#ecg-knockout-rev)">
+    <rect x="13" y="10" width="16" height="9" rx="2.5"/>
+    <rect x="10" y="16" width="44" height="34" rx="6"/>
+  </g>
+  <path d="M4 33 H21 L23 30.5 L25 33 H29 L30.5 36.5 L32 17 L33.5 41 L35 33 H38 L40 29 L42 33 H60"
+        fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

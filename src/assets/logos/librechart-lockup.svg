@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 72" role="img" aria-label="LibreChart logo lockup">
+  <!-- LibreChart · Steady Signal — mark + wordmark. Wordmark in Public Sans with system fallbacks. -->
+  <title>LibreChart lockup</title>
+  <g transform="translate(6 4) scale(0.9375)">
+    <rect x="13" y="10" width="16" height="9" rx="2.5" fill="#155B8B"/>
+    <rect x="10" y="16" width="44" height="34" rx="6" fill="#155B8B"/>
+    <path d="M4 33 H21 L23 30.5 L25 33 H29 L30.5 36.5 L32 17 L33.5 41 L35 33 H38 L40 29 L42 33 H60"
+          fill="none" stroke="#0E8C7F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="78" y="47" font-family="'Public Sans','Helvetica Neue',Arial,sans-serif" font-size="34" letter-spacing="-0.5">
+    <tspan fill="#14283C" font-weight="400">Libre</tspan><tspan fill="#155B8B" font-weight="700">Chart</tspan>
+  </text>
+</svg>

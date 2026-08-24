@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LibreChart mark — patient chart card with ECG trace">
+  <!-- LibreChart · Steady Signal (Direction 1). Rounded patient-chart card in Chart Blue with a
+       folder tab, crossed by a continuous ECG trace in Vital Teal whose baseline runs past both
+       card edges. Grid-true: key points align to a 2-unit sub-grid on a 24-unit design field. -->
+  <title>LibreChart mark</title>
+  <!-- File-tab corner -->
+  <rect x="13" y="10" width="16" height="9" rx="2.5" fill="#155B8B"/>
+  <!-- Chart card body -->
+  <rect x="10" y="16" width="44" height="34" rx="6" fill="#155B8B"/>
+  <!-- ECG trace: baseline extends past both card edges; centered PQRST complex -->
+  <path d="M4 33 H21 L23 30.5 L25 33 H29 L30.5 36.5 L32 17 L33.5 41 L35 33 H38 L40 29 L42 33 H60"
+        fill="none" stroke="#0E8C7F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

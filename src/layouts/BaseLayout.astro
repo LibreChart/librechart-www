@@ -1,0 +1,89 @@
+---
+/**
+ * Base document shell.
+ *
+ * Fonts are self-hosted — the Google Fonts <link> tags from the original
+ * marketing-homepage.html are deliberately gone. LibreChart's product runs on
+ * offline clinic networks and the site holds the same line.
+ */
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Set to false on pages that should not be indexed. */
+  indexable?: boolean;
+}
+
+const { title, description, indexable = true } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/icon-512.png', Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {!indexable && <meta name="robots" content="noindex" />}
+
+    <!-- Only the two faces used above the fold. Preloading all six delays LCP.
+         `crossorigin` is required even same-origin, or the browser fetches twice. -->
+    <link
+      rel="preload"
+      href="/fonts/public-sans-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/source-serif-4-latin-opsz-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon-180.png" />
+    <meta name="theme-color" content="#155B8B" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="LibreChart" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+
+  <body>
+    <slot />
+
+    <script>
+      // Mobile nav toggle — progressive enhancement only.
+      // Moves into Header.astro in B3 step 2.
+      (function () {
+        const nav = document.getElementById('siteNav');
+        const toggle = document.getElementById('navToggle');
+        if (!nav || !toggle) return;
+        toggle.addEventListener('click', function () {
+          const open = nav.classList.toggle('open');
+          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        // Close the menu after choosing a link on mobile.
+        nav.querySelectorAll('.nav-links a').forEach(function (link) {
+          link.addEventListener('click', function () {
+            nav.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

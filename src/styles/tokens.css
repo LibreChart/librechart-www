@@ -1,0 +1,68 @@
+/**
+ * LibreChart design tokens — brand direction "Steady Signal".
+ *
+ * Values are carried over verbatim from branding/marketing-homepage.html so the
+ * ported CSS needs no rewriting. The --lc-* aliases at the bottom mirror the
+ * Drupal theme's naming (web/themes/custom/librechart_theme/css/tokens.css) so
+ * a component lifted from the product drops in unchanged.
+ *
+ * Note the deliberate divergence in radius: marketing is softer (12px) than the
+ * dense clinical UI (6px). Both are correct. Do not unify them.
+ */
+
+:root {
+  /* Brand */
+  --chart-blue: #155b8b;
+  --chart-blue-dark: #114b73;
+  --vital-teal: #0e8c7f;
+  --vital-teal-dark: #0b7166;
+
+  /* Neutrals */
+  --ink: #14283c;
+  --muted: #4a6274;
+  --mist: #f5f8fa;
+  --white: #ffffff;
+  --border: #d7e1e8;
+
+  /* Alerts — reserved for genuine warnings so colour keeps its meaning. */
+  --amber: #d97706;
+  --amber-bg: #fef3e4;
+  --danger: #b3261e;
+
+  /* Shape */
+  --radius: 12px;
+  --radius-lg: 18px;
+  --shadow-sm: 0 1px 2px rgba(20, 40, 60, 0.06), 0 1px 3px rgba(20, 40, 60, 0.08);
+  --shadow-md: 0 4px 12px rgba(20, 40, 60, 0.08), 0 12px 32px rgba(20, 40, 60, 0.1);
+  --maxw: 1200px;
+
+  /* Type. "Source Serif 4 Variable" is the self-hosted variable face; the
+     static name is kept as a fallback for anyone with it installed locally. */
+  --font-ui: 'Public Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Source Serif 4 Variable', 'Source Serif 4', Georgia, 'Times New Roman', serif;
+
+  /* 4px spacing grid, matching the product theme. */
+  --lc-space-1: 4px;
+  --lc-space-2: 8px;
+  --lc-space-3: 12px;
+  --lc-space-4: 16px;
+  --lc-space-5: 20px;
+  --lc-space-6: 24px;
+  --lc-space-7: 28px;
+  --lc-space-8: 32px;
+
+  /* Aliases matching the Drupal theme's token names. */
+  --lc-primary: var(--chart-blue);
+  --lc-primary-hover: var(--chart-blue-dark);
+  --lc-success: var(--vital-teal);
+  --lc-ink: var(--ink);
+  --lc-ink-muted: var(--muted);
+  --lc-surface: var(--mist);
+  --lc-surface-card: var(--white);
+  --lc-border: var(--border);
+  --lc-alert: var(--amber);
+  --lc-danger: var(--danger);
+  --lc-radius: 6px;
+  --lc-radius-lg: 10px;
+  --lc-font-family: var(--font-ui);
+}
