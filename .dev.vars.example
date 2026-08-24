@@ -1,0 +1,15 @@
+# Copy to .dev.vars (gitignored) for local development.
+#
+# These are Turnstile's documented ALWAYS-PASS test keys, safe to commit.
+# Pair with PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA in .env
+# so the widget and the secret come from the same test pair - mixing keys
+# from two different widgets is the classic silent Turnstile failure.
+#
+#   always passes : 1x00000000000000000000AA / 1x0000000000000000000000000000000AA
+#   always fails  : 2x00000000000000000000AB / 2x0000000000000000000000000000000AA
+#   force challenge: 3x00000000000000000000FF
+#   "token already spent": 3x0000000000000000000000000000000AA
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+
+# Real key from resend.com. NEVER commit the real value.
+RESEND_API_KEY=re_test_placeholder

@@ -18,6 +18,17 @@
 
 	"observability": {
 		"enabled": true
+	},
+
+	"vars": {
+		// Must be on the Resend-verified domain. Using the submitter's address
+		// here would fail DMARC and land the mail in spam.
+		"CONTACT_FROM": "LibreChart <site@librechart.org>"
+
+		// CONTACT_TO is deliberately NOT set yet - nobody has told us which
+		// inbox should receive enquiries, and guessing would silently mail a
+		// stranger. src/pages/api/contact.ts refuses to send without it.
+		// Add:  "CONTACT_TO": "someone@example.com"
 	}
 
 	// DEFERRED — do not uncomment until the referenced step is done:

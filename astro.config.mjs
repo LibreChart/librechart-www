@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 
 import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
@@ -53,7 +53,8 @@ export default defineConfig({
         "default-src 'self'",
         "img-src 'self' data:",
         "font-src 'self'",
-        "connect-src 'self'",
+        // Turnstile XHRs to challenges.cloudflare.com, so 'self' alone breaks it.
+        "connect-src 'self' https://challenges.cloudflare.com",
         "form-action 'self'",
         "base-uri 'self'",
         "object-src 'none'",
@@ -68,7 +69,28 @@ export default defineConfig({
 
   prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
 
-  // NOTE: the `env.schema` block (PUBLIC_TURNSTILE_SITE_KEY, TURNSTILE_SECRET_KEY,
-  // RESEND_API_KEY, CONTACT_TO, CONTACT_FROM) is deliberately deferred to B6.
-  // Declaring required vars before the keys exist would fail every build.
+  env: {
+    schema: {
+      // The Turnstile SITE key is public by definition - it is rendered into
+      // the contact page's HTML. Committing it as the default is deliberate:
+      // this value is needed at BUILD time, and supplying it as a Workers
+      // Builds "build variable" is the classic way to have the widget render
+      // with an empty key and silently never appear. A default removes that
+      // failure mode entirely. Override with PUBLIC_TURNSTILE_SITE_KEY in
+      // .env when testing with Turnstile's always-pass test keys.
+      PUBLIC_TURNSTILE_SITE_KEY: envField.string({
+        context: 'client',
+        access: 'public',
+        default: '0x4AAAAAAEanWjZIZR-tG2cl',
+      }),
+
+      // Secrets. Never in the repo - set with `wrangler secret put`.
+      TURNSTILE_SECRET_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      RESEND_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+
+      // Plain vars, set in wrangler.jsonc.
+      CONTACT_TO: envField.string({ context: 'server', access: 'public', optional: true }),
+      CONTACT_FROM: envField.string({ context: 'server', access: 'public', optional: true }),
+    },
+  },
 });

@@ -1,0 +1,26 @@
+---
+import PageLayout from '../../../layouts/PageLayout.astro';
+import { CONTACT_ERRORS, type ContactErrorKind } from '../../../data/contact-errors';
+
+/**
+ * Prerendered failure pages. /contact is static and cannot read ?error=...
+ * server-side, so failures redirect here. Keeps the invariant that exactly
+ * one route on the site is server-rendered.
+ */
+export function getStaticPaths() {
+  return Object.keys(CONTACT_ERRORS).map((kind) => ({ params: { kind } }));
+}
+
+const { kind } = Astro.params;
+const { heading, lede } = CONTACT_ERRORS[kind as ContactErrorKind];
+---
+
+<PageLayout
+  title={`${heading} — LibreChart`}
+  description={lede}
+  heading={heading}
+  lede={lede}
+  indexable={false}
+>
+  <p><a class="btn btn-primary" href="/contact">Back to the form</a></p>
+</PageLayout>

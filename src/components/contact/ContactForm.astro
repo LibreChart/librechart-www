@@ -1,0 +1,96 @@
+---
+/**
+ * Contact / demo-request form.
+ *
+ * A real <form method="POST"> that works without JavaScript for everything
+ * except the Turnstile widget, which needs it. The <noscript> path offers a
+ * mailto instead so nobody hits a dead end.
+ */
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+
+<form method="POST" action="/api/contact" class="contact-form">
+  <!-- Read back on the server to reject submissions completed impossibly fast. -->
+  <input type="hidden" name="rendered_at" value={Date.now()} />
+
+  <!-- Honeypot: off-screen for people, irresistible to bots. -->
+  <div class="hp" aria-hidden="true">
+    <label for="website">Website</label>
+    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="field">
+    <label for="name">Your name <span class="req" aria-hidden="true">*</span></label>
+    <input type="text" id="name" name="name" required maxlength="120" autocomplete="name" />
+  </div>
+
+  <div class="field">
+    <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+    <input type="email" id="email" name="email" required maxlength="254" autocomplete="email" />
+  </div>
+
+  <div class="field">
+    <label for="organisation">Clinic or organisation</label>
+    <input type="text" id="organisation" name="organisation" maxlength="160" autocomplete="organization" />
+  </div>
+
+  <fieldset class="field">
+    <legend>What can we help with?</legend>
+    <label class="radio"><input type="radio" name="topic" value="demo" checked /> Request a demo</label>
+    <label class="radio"><input type="radio" name="topic" value="deploy" /> Deploying at our clinic</label>
+    <label class="radio"><input type="radio" name="topic" value="contribute" /> Contributing to the project</label>
+    <label class="radio"><input type="radio" name="topic" value="other" /> Something else</label>
+  </fieldset>
+
+  <div class="field">
+    <label for="message">Message <span class="req" aria-hidden="true">*</span></label>
+    <textarea id="message" name="message" required rows="7" maxlength="5000"></textarea>
+  </div>
+
+  <div class="cf-turnstile" data-sitekey={siteKey} data-theme="light" data-action="contact"></div>
+
+  <noscript>
+    <p class="form-note">
+      This form uses JavaScript for spam protection. Please email{' '}
+      <a href="mailto:hello@librechart.org">hello@librechart.org</a> instead.
+    </p>
+  </noscript>
+
+  <div>
+    <button type="submit" class="btn btn-primary">Send message</button>
+  </div>
+
+  <p class="form-note">
+    A real person reads these, usually within a couple of days.{' '}
+    <strong>Never send patient information through this form.</strong>
+  </p>
+</form>
+
+<script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
+
+<style>
+  .contact-form { display: grid; gap: 22px; max-width: 620px; }
+  .field { display: grid; gap: 6px; }
+  .field > label, legend { font-weight: 600; font-size: 15px; color: var(--ink); }
+  .req { color: var(--danger); }
+  input[type='text'], input[type='email'], textarea {
+    font: inherit;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--ink);
+    width: 100%;
+  }
+  textarea { resize: vertical; }
+  input:focus-visible, textarea:focus-visible {
+    outline: 3px solid var(--vital-teal);
+    outline-offset: 2px;
+    border-color: var(--vital-teal);
+  }
+  fieldset.field { border: 0; padding: 0; margin: 0; }
+  legend { padding: 0 0 8px; }
+  .radio { font-weight: 400; display: flex; gap: 9px; align-items: center; font-size: 0.98rem; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .form-note { color: var(--muted); font-size: 14px; margin: 0; }
+</style>

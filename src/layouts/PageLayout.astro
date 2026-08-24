@@ -57,9 +57,12 @@ const { title, description, heading, lede, indexable = true } = Astro.props;
     color: var(--muted);
     font-size: clamp(1.02rem, 2vw, 1.18rem);
   }
-  .page-body { padding: 56px 0 88px; }
+  /* padding-BLOCK, not the shorthand: .page-body also carries .wrap, and a
+     `padding` shorthand here (0-2-0 once scoped) beats `.wrap` (0-1-0) and
+     wipes out the horizontal gutters. See CASCADE TRAP in global.css. */
+  .page-body { padding-block: 56px 88px; }
   @media (max-width: 560px) {
     .page-head { padding: 46px 0 34px; }
-    .page-body { padding: 40px 0 64px; }
+    .page-body { padding-block: 40px 64px; }
   }
 </style>
