@@ -38,21 +38,7 @@
 			"binding": "CONTACT_KV",
 			"id": "0fa83d92af074dd697f177b9b3befaf0"
 		}
-	]
-	// DEFERRED — do not uncomment until the referenced step is done:
-	//
-	// B6 — contact form config:
-	// "vars": {
-	//   "CONTACT_TO": "you@example.com",
-	//   "CONTACT_FROM": "LibreChart <site@librechart.org>"
-	// },
-	//
-	// A7 — paste the id printed by `wrangler kv namespace create CONTACT_KV`.
-	// A placeholder id here will fail the deploy, so it stays commented out:
-	// "kv_namespaces": [
-	//   { "binding": "CONTACT_KV", "id": "<from A7>" }
-	// ],
-	//
+	],
 	// Custom domains, declared here rather than clicked in the dashboard so the
 	// live hostnames are version-controlled and reproducible. `wrangler deploy`
 	// creates the DNS record and certificate for each.
