@@ -7,6 +7,13 @@
 	// Resolved from the adapter package, NOT ./dist/_worker.js/index.js.
 	"main": "@astrojs/cloudflare/entrypoints/server",
 
+	// No *.workers.dev URL. The first deploy has to happen before secrets can be
+	// set (secrets attach to an existing Worker), and without this that first
+	// deploy would publish a publicly reachable site whose contact form is
+	// broken. With it, the Worker exists but is unreachable until a custom
+	// domain is attached in Phase 4. Flip to true if you want a preview URL.
+	"workers_dev": false,
+
 	"assets": {
 		"directory": "./dist",
 		"binding": "ASSETS",

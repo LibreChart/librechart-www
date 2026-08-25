@@ -37,27 +37,129 @@ most of it waiting for DNS.
       (DKIM TXT, `send` MX, `send` SPF TXT). Set them **DNS only** — grey cloud.
 - [ ] **A6** Wait for Resend to show the domain **Verified**
 - [ ] **A7** Add DMARC: TXT `_dmarc` = `v=DMARC1; p=none;`
-- [ ] **A8** Enable **Email Routing** on the zone, add `hello@librechart.org`
-      forwarding to your real inbox, and click its verification link
+- [ ] **A8** ⚠️ **NOT DONE — checked 25 Aug 2026.** `librechart.org` has no apex
+      MX and no apex TXT record, which means Email Routing has never been
+      enabled. `CONTACT_TO` is `hello@librechart.org`, so until this is done
+      **every contact form submission emails an address that bounces.**
+
+      Cloudflare → the `librechart.org` zone → **Email → Email Routing** →
+      *Get started*. Cloudflare adds the apex MX and SPF records itself. Then
+      add a custom address `hello@librechart.org` forwarding to your real
+      inbox, and click the verification link it emails you.
+
+      Verify with: `dig +short MX librechart.org` — should list
+      `route1/2/3.mx.cloudflare.net`.
 
 > Email Routing (inbound) puts MX/SPF on the apex; Resend (outbound) uses the
 > `send` subdomain. They do not collide.
 
 ## Phase 3 — Secrets and storage
 
-- [ ] **A9** Add production hostnames to the Turnstile widget: `librechart.org`
-      and `www.librechart.org`. A hostname mismatch fails **silently**.
-- [ ] **A10** Create the KV namespace, then send me the id it prints:
-      ```
-      npx wrangler kv namespace create CONTACT_KV
-      ```
-- [ ] **C1** *(me)* Paste that id into `wrangler.jsonc` and uncomment the binding
-- [ ] **A11** Set both secrets — each prompts interactively, so the value never
-      touches a file or your shell history:
-      ```
-      npx wrangler secret put TURNSTILE_SECRET_KEY
-      npx wrangler secret put RESEND_API_KEY
-      ```
+All of this happens in `~/Sites/librechart-www`. Run `cd ~/Sites/librechart-www`
+first; every `npx wrangler` command reads `wrangler.jsonc` from the working
+directory.
+
+### 3.1 Authenticate wrangler
+
+You are not currently logged in — this blocks every other step in this phase.
+
+```
+npx wrangler login
+```
+
+Opens a browser for Cloudflare OAuth. Approve the requested scopes. Confirm it
+worked:
+
+```
+npx wrangler whoami
+```
+
+Expect your email and account id. If it still says *not authenticated*, the
+browser callback did not complete — run `npx wrangler login` again rather than
+retrying `whoami`.
+
+### 3.2 Add the production hostnames to Turnstile
+
+Cloudflare dashboard → **Turnstile** → your widget → **Settings**.
+
+Under *Hostnames*, add:
+
+- `librechart.org`
+- `www.librechart.org`
+
+Keep `localhost` if it is there — it is what makes local testing work.
+
+> A hostname mismatch does not raise an error. The widget simply never appears
+> and the form cannot be submitted, which looks like a code bug and is not one.
+> This is the single most common Turnstile failure.
+
+Do **not** create a second widget. Two widgets means two key pairs, and mixing a
+site key from one with a secret from the other is the second most common
+failure. The site key already in `astro.config.mjs`
+(`0x4AAAAAAEanWjZIZR-tG2cl`) must stay paired with the secret you set in 3.5.
+
+### 3.3 Create the KV namespace
+
+```
+npx wrangler kv namespace create CONTACT_KV --binding CONTACT_KV --update-config
+```
+
+`--update-config` writes the binding and its id straight into `wrangler.jsonc`,
+so there is nothing to copy by hand and nothing to send me.
+
+Check it landed:
+
+```
+grep -A3 kv_namespaces wrangler.jsonc
+```
+
+You should see a real 32-character hex id. If the block is still commented out,
+the flag did not apply — tell me and I will paste it in manually.
+
+### 3.4 First deploy (creates the Worker)
+
+Secrets attach to a Worker that already exists, so the Worker has to be created
+before 3.5. This deploy is safe: `wrangler.jsonc` sets `"workers_dev": false`,
+so the Worker is created with **no public URL at all**. Nothing is reachable
+until a custom domain is attached in Phase 4.
+
+```
+npm run deploy
+```
+
+Expect `Total Upload: ~550 KiB`, a `CONTACT_KV` binding listed, and no
+`workers.dev` URL in the output. If it prints a `*.workers.dev` address, stop —
+`workers_dev: false` did not take effect and the broken-form window is open.
+
+### 3.5 Set the two secrets
+
+Each prompts for the value on stdin, so it never enters a file, your shell
+history, or this transcript.
+
+```
+npx wrangler secret put TURNSTILE_SECRET_KEY
+npx wrangler secret put RESEND_API_KEY
+```
+
+- `TURNSTILE_SECRET_KEY` — Turnstile → your widget → Settings → **Secret key**.
+  Starts `0x4...`. This is *not* the site key.
+- `RESEND_API_KEY` — the Resend key you already have. Starts `re_`.
+
+Verify both are attached (names only; values are never readable back):
+
+```
+npx wrangler secret list
+```
+
+Expect exactly `TURNSTILE_SECRET_KEY` and `RESEND_API_KEY`.
+
+### Phase 3 done when
+
+- [ ] `npx wrangler whoami` shows your account
+- [ ] Turnstile widget lists `librechart.org` and `www.librechart.org`
+- [ ] `wrangler.jsonc` contains a real `CONTACT_KV` id
+- [ ] `npm run deploy` succeeded and printed **no** workers.dev URL
+- [ ] `npx wrangler secret list` shows both secrets
 
 ## Phase 4 — Deploy
 
