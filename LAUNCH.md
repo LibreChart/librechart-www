@@ -3,6 +3,16 @@
 Everything needed to get librechart.org live. **A** items need your accounts and
 your card — I cannot do them. **C** items are code changes I make.
 
+**"Zone" means a domain you have added to Cloudflare.** It is Cloudflare's own
+word for it, and it appears throughout their docs. To open one: sign in, and the
+account home lists your domains — click `librechart.org`. The left sidebar then
+shows that domain's settings (DNS, Rules, SSL/TLS, Caching).
+
+Note the split: some things live *inside* a domain (DNS records, redirect rules,
+SSL settings) and some live at the *account* level above it, applying across all
+your domains — Workers, Turnstile, and Email Routing among them. That catches
+people out, so each step below says which.
+
 Order matters in two places, flagged below. Roughly 60–90 minutes of your time,
 most of it waiting for DNS.
 
@@ -42,13 +52,25 @@ most of it waiting for DNS.
       enabled. `CONTACT_TO` is `hello@librechart.org`, so until this is done
       **every contact form submission emails an address that bounces.**
 
-      Cloudflare → the `librechart.org` zone → **Email → Email Routing** →
-      *Get started*. Cloudflare adds the apex MX and SPF records itself. Then
-      add a custom address `hello@librechart.org` forwarding to your real
-      inbox, and click the verification link it emails you.
+      Email Routing lives at the **account** level, not inside the domain:
+      **Compute → Email Service → Email Routing**, or go straight to
+      <https://dash.cloudflare.com/?to=/:account/email-service/routing>.
 
-      Verify with: `dig +short MX librechart.org` — should list
-      `route1/2/3.mx.cloudflare.net`.
+      1. **Onboard Domain** → choose `librechart.org`
+      2. Review the DNS records Cloudflare will add (MX, SPF TXT, DKIM TXT) → **Done**
+      3. **Destination Addresses** → add your real inbox → open the mail
+         Cloudflare sends it and select *Verify email address*
+      4. **Routing Rules** → *Create routing rule* → custom address
+         `hello@librechart.org` → forward to that verified destination
+
+      Steps 3 and 4 are separate: verifying your inbox does not by itself route
+      anything. Both are needed.
+
+      Verify when DNS has propagated (usually 5–15 minutes on Cloudflare DNS):
+      ```
+      dig +short MX librechart.org
+      ```
+      Expect `route1.mx.cloudflare.net` and friends. Empty means it is not on.
 
 > Email Routing (inbound) puts MX/SPF on the apex; Resend (outbound) uses the
 > `send` subdomain. They do not collide.
@@ -177,7 +199,7 @@ Expect exactly `TURNSTILE_SECRET_KEY` and `RESEND_API_KEY`.
 - [ ] **A15** SSL/TLS mode → **Full (strict)**
 - [ ] **A16** Confirm **Auto Minify is off** (Astro docs flag it as a cause of
       broken hydration)
-- [ ] **A17** On the `librechart.dev` zone → Rules → Redirect Rules:
+- [ ] **A17** Open the `librechart.dev` domain → **Rules → Redirect Rules**:
       `Hostname equals librechart.dev` → dynamic redirect to
       `concat("https://librechart.org", http.request.uri.path)`, **301**,
       preserve query string
