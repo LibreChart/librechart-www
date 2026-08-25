@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # Layout-fidelity check for the homepage port (B3).
 #
+# NOTE: the port is complete and the site has begun diverging from the original
+# by design (ECG backdrop removed, Contact nav item added). The original is now
+# a historical reference, not a target - expect intentional diffs here. Before
+# starting a design change, run this to record the CURRENT numbers, then re-run
+# after, so you can tell an intended change from an accidental one.
+#
 # Builds the site, serves it next to the original hand-written
 # branding/marketing-homepage.html at the SAME origin, and loads both into
 # iframes so their geometry can be diffed at every breakpoint.
