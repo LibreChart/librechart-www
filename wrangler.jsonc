@@ -23,12 +23,12 @@
 	"vars": {
 		// Must be on the Resend-verified domain. Using the submitter's address
 		// here would fail DMARC and land the mail in spam.
-		"CONTACT_FROM": "LibreChart <site@librechart.org>"
+		"CONTACT_FROM": "LibreChart <site@librechart.org>",
 
-		// CONTACT_TO is deliberately NOT set yet - nobody has told us which
-		// inbox should receive enquiries, and guessing would silently mail a
-		// stranger. src/pages/api/contact.ts refuses to send without it.
-		// Add:  "CONTACT_TO": "someone@example.com"
+		// Delivered via Cloudflare Email Routing, which forwards this address
+		// to a real inbox. Email Routing's MX and SPF records sit on the apex;
+		// Resend's sit on the `send` subdomain, so the two do not collide.
+		"CONTACT_TO": "hello@librechart.org"
 	}
 
 	// DEFERRED — do not uncomment until the referenced step is done:

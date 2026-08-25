@@ -196,6 +196,24 @@ npx wrangler secret put RESEND_API_KEY
 3. SSL/TLS mode → **Full (strict)**.
 4. Confirm **Auto Minify is off** — Astro's docs flag it as a cause of broken hydration.
 
+### A9b · Cloudflare Email Routing (delivers `hello@librechart.org`)
+
+The site publishes `hello@librechart.org` in the footer, the `<noscript>`
+fallback, and the "something went wrong" page, and the contact endpoint sends
+there. Nothing receives it until this is done.
+
+1. Zone → **Email → Email Routing** → enable. Cloudflare adds MX + SPF records
+   to the **apex** automatically.
+2. Add a custom address `hello@librechart.org` → forward to your real inbox.
+3. Click the verification link Cloudflare sends to that inbox.
+
+These records do **not** conflict with Resend: Email Routing uses the apex,
+Resend uses the `send` subdomain (see `docs/DNS-RECORDS.md`).
+
+Note the asymmetry — Email Routing handles **inbound** only. Outbound is
+Resend, sending as `site@librechart.org`. Replies to an enquiry go to the
+submitter directly via `reply_to`, not through either system.
+
 ### A9 · Hardening and analytics
 1. **Security → WAF → Rate limiting rule**: `POST /api/contact`, 5 requests / 10 min / IP. The free plan allows exactly one rule — this is the right one to spend it on.
 2. **Web Analytics** → add `librechart.org` → hand me the beacon token.
@@ -408,6 +426,9 @@ Finally: Turnstile renders with the production sitekey on a hostname matching it
 - **Domain availability is unverified** — checked live at A2. A different final string means updating `astro.config.mjs`, `wrangler.jsonc`, and the Resend sender.
 - **Confirm `LibreChart/LibreChart` is public** (A9.3). It's the homepage's primary CTA.
 - **Real screenshots.** The homepage uses a hand-built HTML mockup of the chart UI, which is fine in context. Real de-identified captures would be stronger but need a demo instance — Tier 2, and a prerequisite for any dedicated `/screenshots` page.
+- **Resend API key exposure — accepted, closed.** The key was pasted into a
+  chat transcript and the decision was to keep it rather than rotate. Recorded
+  here so it is a known state rather than an oversight.
 - **Licence for the site repo** is your call: GPL-2.0-or-later for consistency with the EMR, or MIT since this is marketing code, not the product.
 
 ---
