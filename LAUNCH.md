@@ -47,10 +47,17 @@ most of it waiting for DNS.
       (DKIM TXT, `send` MX, `send` SPF TXT). Set them **DNS only** — grey cloud.
 - [ ] **A6** Wait for Resend to show the domain **Verified**
 - [ ] **A7** Add DMARC: TXT `_dmarc` = `v=DMARC1; p=none;`
-- [ ] **A8** ⚠️ **NOT DONE — checked 25 Aug 2026.** `librechart.org` has no apex
-      MX and no apex TXT record, which means Email Routing has never been
-      enabled. `CONTACT_TO` is `hello@librechart.org`, so until this is done
-      **every contact form submission emails an address that bounces.**
+- [x] **A8** Email Routing enabled — apex MX (`route1/2/3.mx.cloudflare.net`)
+      and apex SPF confirmed on 1.1.1.1 and 8.8.8.8. Resend's `send.` records
+      are unaffected.
+- [ ] **A8b** ⚠️ **Send a test email to `hello@librechart.org` and confirm it
+      arrives.** DNS only proves the domain was onboarded. It cannot show
+      whether the destination inbox was verified or whether a routing rule
+      exists — and a domain with correct MX records but no rule accepts mail
+      and drops it silently. `CONTACT_TO` points here, so if this is wrong,
+      enquiries vanish without any error anywhere.
+
+      <details><summary>Setup steps, if the test mail does not arrive</summary>
 
       Email Routing lives at the **account** level, not inside the domain:
       **Compute → Email Service → Email Routing**, or go straight to
@@ -71,6 +78,8 @@ most of it waiting for DNS.
       dig +short MX librechart.org
       ```
       Expect `route1.mx.cloudflare.net` and friends. Empty means it is not on.
+
+      </details>
 
 > Email Routing (inbound) puts MX/SPF on the apex; Resend (outbound) uses the
 > `send` subdomain. They do not collide.
