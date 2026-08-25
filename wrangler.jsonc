@@ -23,7 +23,20 @@
 		// One canonical URL shape; mirrors trailingSlash:'never' in astro.config.mjs.
 		"html_handling": "drop-trailing-slash",
 		// Serve the built 404.astro rather than a bare Workers error.
-		"not_found_handling": "404-page"
+		"not_found_handling": "404-page",
+
+		// Route /api/* to the Worker BEFORE the asset handler sees it.
+		//
+		// Without this the contact form is impossible to submit. The asset layer
+		// intercepts *navigation* requests first, and a browser form POST is a
+		// navigation (Sec-Fetch-Mode: navigate). With no asset at /api/contact it
+		// answers 405 and the Worker never runs - Chrome shows the 405, Safari
+		// offers the empty response as a download.
+		//
+		// This is why it passed every test: curl and fetch() are not navigations,
+		// so they reached the Worker and returned a correct 303. Adding only
+		// `Sec-Fetch-Mode: navigate` to an otherwise identical curl flips 303 to 405.
+		"run_worker_first": ["/api/*"]
 	},
 	"observability": {
 		"enabled": true
