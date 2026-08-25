@@ -1,0 +1,199 @@
+---
+/**
+ * Schema.org structured data, emitted as a JSON-LD @graph.
+ *
+ * Type choice: LibreChart is modelled as `WebApplication` (a subtype of
+ * `SoftwareApplication`) rather than `SoftwareApplication` itself, because it
+ * is installed on a server and used through a browser — `browserRequirements`
+ * only exists on the subtype. Consumers that look for `SoftwareApplication`
+ * still match, since subtypes satisfy the parent.
+ *
+ * `Product` was rejected: nothing is sold. `MedicalWebPage` was rejected too —
+ * that type is for medical *content* written for patients, not for software.
+ *
+ * The graph is one document with four linked nodes rather than four separate
+ * scripts, so `@id` references resolve for the crawler:
+ *
+ *   Organization  ─ publisher/author/maintainer of everything below
+ *   WebSite       ─ librechart.org itself
+ *   WebApplication ─ the EMR (homepage only)
+ *   SoftwareSourceCode ─ the GitHub repository (homepage only)
+ *
+ * Deliberately absent: `aggregateRating` and `review`. Google lists one of
+ * them as required for the software-app rich result, but LibreChart has no
+ * ratings, and inventing them violates Google's guidelines and would risk a
+ * manual action. Add a real `aggregateRating` if genuine reviews ever exist.
+ * Also absent: `screenshot` (the product mockup on the homepage is markup, not
+ * an image file) and `softwareVersion` (no tagged release yet).
+ */
+
+interface Props {
+  /** Include the WebApplication + SoftwareSourceCode nodes. Homepage only. */
+  includeSoftware?: boolean;
+}
+
+const { includeSoftware = false } = Astro.props;
+
+const SITE = 'https://librechart.org';
+const REPO = 'https://github.com/LibreChart/LibreChart';
+
+const ORG_ID = `${SITE}/#project`;
+const LOGO_ID = `${SITE}/#logo`;
+const APP_ID = `${SITE}/#librechart`;
+
+const organization = {
+  '@type': 'Organization',
+  '@id': ORG_ID,
+  name: 'The LibreChart project',
+  alternateName: 'LibreChart',
+  url: SITE,
+  description:
+    'An open-source project building a free electronic medical record for medical mission clinics.',
+  logo: {
+    '@type': 'ImageObject',
+    '@id': LOGO_ID,
+    url: `${SITE}/icon-512.png`,
+    contentUrl: `${SITE}/icon-512.png`,
+    width: 512,
+    height: 512,
+    caption: 'LibreChart',
+  },
+  image: { '@id': LOGO_ID },
+  email: 'hello@librechart.org',
+  sameAs: ['https://github.com/LibreChart'],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'technical support',
+    email: 'hello@librechart.org',
+    url: `${SITE}/contact`,
+    availableLanguage: ['English'],
+  },
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': `${SITE}/#website`,
+  url: SITE,
+  name: 'LibreChart',
+  description:
+    'LibreChart is a free, open-source EMR for medical mission clinics. It runs on a local network with no internet required — self-hosted, offline-first, and licensed GPL-2.0.',
+  publisher: { '@id': ORG_ID },
+  inLanguage: 'en',
+};
+
+const application = {
+  '@type': 'WebApplication',
+  '@id': APP_ID,
+  name: 'LibreChart',
+  alternateName: 'LibreChart EMR',
+  url: SITE,
+  description:
+    'LibreChart is a free, open-source electronic medical record built for medical mission clinics. It runs entirely on a local area network with no internet connection required, so a clinic keeps charting when the connection drops. Patients move through role-based stations — registration, triage, labs, clinical evaluation, physical therapy, teaching and pharmacy — and every encounter is kept as a dated visit with full revision history.',
+  applicationCategory: 'HealthApplication',
+  applicationSubCategory: 'Electronic Medical Record (EMR)',
+  operatingSystem:
+    'Linux (Ubuntu 22.04 LTS or Debian 12) for a clinic server; macOS, Windows or Linux for an evaluation install via DDEV',
+  browserRequirements:
+    "Requires a modern web browser on the same local network as the LibreChart server. No internet connection is required.",
+  availableOnDevice: 'Desktop, laptop or tablet on the clinic local network',
+  softwareRequirements:
+    'PHP 8.3 with the fpm, mysql, gd, xml, mbstring, curl, zip, intl and opcache extensions; MariaDB 10.11 or MySQL 8.0; Apache 2.4 or Nginx 1.24 or newer',
+  runtimePlatform: ['PHP 8.3', 'Drupal 11'],
+  memoryRequirements: '2 GB RAM minimum, 4 GB recommended',
+  storageRequirements: '20 GB disk',
+  isAccessibleForFree: true,
+  license: 'https://www.gnu.org/licenses/old-licenses/gpl-2.0.html',
+  copyrightYear: 2026,
+  copyrightHolder: { '@id': ORG_ID },
+  author: { '@id': ORG_ID },
+  publisher: { '@id': ORG_ID },
+  maintainer: { '@id': ORG_ID },
+  inLanguage: ['en', 'es'],
+  image: { '@id': LOGO_ID },
+  downloadUrl: REPO,
+  installUrl: `${SITE}/docs/getting-started`,
+  softwareHelp: {
+    '@type': 'CreativeWork',
+    name: 'Getting started with LibreChart',
+    url: `${SITE}/docs/getting-started`,
+  },
+  // Free software still needs an explicit zero-price Offer: Google treats a
+  // missing `offers.price` as missing data, not as "free".
+  offers: {
+    '@type': 'Offer',
+    price: 0,
+    priceCurrency: 'USD',
+    availability: 'https://schema.org/InStock',
+    url: `${SITE}/docs/getting-started`,
+    seller: { '@id': ORG_ID },
+  },
+  audience: {
+    '@type': 'Audience',
+    audienceType:
+      'Medical mission clinics, pop-up and field clinics, volunteer clinicians, and the technical volunteers who deploy for them',
+  },
+  keywords: [
+    'electronic medical record',
+    'EMR',
+    'open source',
+    'offline-first',
+    'self-hosted',
+    'medical mission',
+    'field clinic',
+    'Drupal',
+    'GPL-2.0',
+  ],
+  featureList: [
+    'Runs entirely on a clinic local area network, with no cloud service or internet connection required',
+    'Patient registration and check-in, with lookup of a returning patient by ID or by name and date of birth',
+    'Triage: chief complaint, allergies, medications, past medical history, and vitals with BMI calculated automatically',
+    'Pregnancy history shown for adult patients and hidden for paediatric patients rather than left blank',
+    'Lab orders and results entry against each ordered test',
+    'Clinical evaluation with notes (dictation supported), body-system assessment, diagnoses, orders and referrals',
+    'Physical therapy station, shown only when a clinician has ordered a PT referral',
+    'Teaching topics covered with the patient, plus external referrals',
+    'Pharmacy dispensing that decrements inventory automatically and requires a written override reason to dispense beyond recorded stock',
+    'Role-based stations, so each worker sees what that station needs and little else',
+    'Every encounter kept as a dated visit that can be reopened later, with revision history showing who changed what',
+    'Site configuration stored as YAML in version control, so changes are reviewable in a plain git diff',
+    'English and Spanish interface',
+  ],
+  isBasedOn: {
+    '@type': 'SoftwareApplication',
+    name: 'Drupal',
+    url: 'https://www.drupal.org',
+    applicationCategory: 'DeveloperApplication',
+  },
+};
+
+const sourceCode = {
+  '@type': 'SoftwareSourceCode',
+  '@id': `${SITE}/#source`,
+  name: 'LibreChart source code',
+  description:
+    'The full source of LibreChart, including the Drupal site configuration exported as YAML.',
+  codeRepository: REPO,
+  url: REPO,
+  programmingLanguage: ['PHP', 'JavaScript'],
+  runtimePlatform: ['PHP 8.3', 'Drupal 11'],
+  targetProduct: { '@id': APP_ID },
+  license: 'https://www.gnu.org/licenses/old-licenses/gpl-2.0.html',
+  author: { '@id': ORG_ID },
+  maintainer: { '@id': ORG_ID },
+  discussionUrl: `${REPO}/issues`,
+  isAccessibleForFree: true,
+};
+
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': includeSoftware
+    ? [organization, website, application, sourceCode]
+    : [organization, website],
+};
+
+// Escaping `<` stops any future string containing "</script>" from closing the
+// element early. JSON.stringify alone does not do this.
+const json = JSON.stringify(graph).replace(/</g, '\\u003c');
+---
+
+<script type="application/ld+json" is:inline set:html={json} />

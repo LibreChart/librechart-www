@@ -7,15 +7,22 @@
  * offline clinic networks and the site holds the same line.
  */
 import '../styles/global.css';
+import SchemaOrg from '../components/SchemaOrg.astro';
 
 interface Props {
   title: string;
   description: string;
   /** Set to false on pages that should not be indexed. */
   indexable?: boolean;
+  /**
+   * Emit the WebApplication + SoftwareSourceCode JSON-LD nodes as well as the
+   * sitewide Organization + WebSite ones. Homepage only - the product entity
+   * belongs on one canonical page, not repeated on every page of the site.
+   */
+  schemaSoftware?: boolean;
 }
 
-const { title, description, indexable = true } = Astro.props;
+const { title, description, indexable = true, schemaSoftware = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/icon-512.png', Astro.site).href;
 ---
@@ -60,6 +67,8 @@ const ogImage = new URL('/icon-512.png', Astro.site).href;
     <meta property="og:image" content={ogImage} />
     <meta property="og:site_name" content="LibreChart" />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <SchemaOrg includeSoftware={schemaSoftware} />
   </head>
 
   <body>
