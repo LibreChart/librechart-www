@@ -8,6 +8,7 @@
  */
 import '../styles/global.css';
 import SchemaOrg from '../components/SchemaOrg.astro';
+import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   title: string;
@@ -20,9 +21,17 @@ interface Props {
    * belongs on one canonical page, not repeated on every page of the site.
    */
   schemaSoftware?: boolean;
+  /** The blog post this page renders, if any. Adds a BlogPosting JSON-LD node. */
+  blogPost?: CollectionEntry<'blog'>;
 }
 
-const { title, description, indexable = true, schemaSoftware = false } = Astro.props;
+const {
+  title,
+  description,
+  indexable = true,
+  schemaSoftware = false,
+  blogPost,
+} = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/icon-512.png', Astro.site).href;
 ---
@@ -68,7 +77,7 @@ const ogImage = new URL('/icon-512.png', Astro.site).href;
     <meta property="og:site_name" content="LibreChart" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <SchemaOrg includeSoftware={schemaSoftware} />
+    <SchemaOrg includeSoftware={schemaSoftware} post={blogPost} />
   </head>
 
   <body>

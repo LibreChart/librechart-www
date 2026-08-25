@@ -11,7 +11,12 @@ const fmt = (d: Date) =>
   d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 
-<PageLayout title={`${title} — LibreChart`} description={description} indexable={!draft}>
+<PageLayout
+  title={`${title} — LibreChart`}
+  description={description}
+  indexable={!draft}
+  blogPost={post}
+>
   <article>
     <header class="post-head">
       {draft && <p class="draft-flag">Draft — not published</p>}

@@ -3,6 +3,7 @@
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   title: string;
@@ -10,12 +11,19 @@ interface Props {
   heading?: string;
   lede?: string;
   indexable?: boolean;
+  /** Passed straight through to BaseLayout for the BlogPosting JSON-LD node. */
+  blogPost?: CollectionEntry<'blog'>;
 }
 
-const { title, description, heading, lede, indexable = true } = Astro.props;
+const { title, description, heading, lede, indexable = true, blogPost } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} indexable={indexable}>
+<BaseLayout
+  title={title}
+  description={description}
+  indexable={indexable}
+  blogPost={blogPost}
+>
   <a class="skip-link" href="#main">Skip to main content</a>
   <Header />
 

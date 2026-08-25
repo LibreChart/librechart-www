@@ -18,6 +18,12 @@
  *   WebSite       ─ librechart.org itself
  *   WebApplication ─ the EMR (homepage only)
  *   SoftwareSourceCode ─ the GitHub repository (homepage only)
+ *   BlogPosting   ─ the post being rendered (blog post pages only)
+ *
+ * BlogPosting carries no `image`. Google wants one for the article rich
+ * result, but no post has a per-post image, and passing the site logo as the
+ * article image is exactly what Google's guidelines tell you not to do. Same
+ * call as `aggregateRating` below: flag the gap rather than fake the value.
  *
  * Deliberately absent: `aggregateRating` and `review`. Google lists one of
  * them as required for the software-app rich result, but LibreChart has no
@@ -27,12 +33,16 @@
  * an image file) and `softwareVersion` (no tagged release yet).
  */
 
+import type { CollectionEntry } from 'astro:content';
+
 interface Props {
   /** Include the WebApplication + SoftwareSourceCode nodes. Homepage only. */
   includeSoftware?: boolean;
+  /** The blog post being rendered, if this is a post page. */
+  post?: CollectionEntry<'blog'>;
 }
 
-const { includeSoftware = false } = Astro.props;
+const { includeSoftware = false, post } = Astro.props;
 
 const SITE = 'https://librechart.org';
 const REPO = 'https://github.com/LibreChart/LibreChart';
@@ -183,12 +193,59 @@ const sourceCode = {
   isAccessibleForFree: true,
 };
 
-const graph = {
-  '@context': 'https://schema.org',
-  '@graph': includeSoftware
-    ? [organization, website, application, sourceCode]
-    : [organization, website],
-};
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+/**
+ * Rough word count for a post body. Fenced code blocks and HTML tags are
+ * dropped first, so a long shell listing does not inflate the figure, and a
+ * token has to contain a letter or digit to count - the pipes and dashes of a
+ * markdown table are not words.
+ */
+function wordCount(markdown: string): number {
+  const prose = markdown.replace(/```[\s\S]*?```/g, ' ').replace(/<[^>]+>/g, ' ');
+  return prose.split(/\s+/).filter((t) => /[A-Za-z0-9]/.test(t)).length;
+}
+
+const slugify = (value: string) =>
+  value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+// Drafts are dropped from `astro build` anyway, but they do render in `astro
+// dev` under a noindex. Skip the markup there too, so what a crawler is told
+// never contradicts the robots meta tag.
+const blogPosting =
+  post && !post.data.draft
+    ? {
+        '@type': 'BlogPosting',
+        '@id': `${canonical}#post`,
+        headline: post.data.title,
+        description: post.data.description,
+        url: canonical,
+        datePublished: post.data.pubDate.toISOString(),
+        dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+        author: {
+          '@type': 'Person',
+          '@id': `${SITE}/#person-${slugify(post.data.author)}`,
+          name: post.data.author,
+        },
+        publisher: { '@id': ORG_ID },
+        isPartOf: { '@id': `${SITE}/#website` },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+        // A type + name alongside the @id keeps the reference resolvable
+        // within this document, while the shared @id merges it into the full
+        // WebApplication entity described on the homepage.
+        about: { '@type': 'SoftwareApplication', '@id': APP_ID, name: 'LibreChart' },
+        inLanguage: 'en',
+        isAccessibleForFree: true,
+        wordCount: wordCount(post.body ?? ''),
+        ...(post.data.tags.length > 0 ? { keywords: post.data.tags } : {}),
+      }
+    : null;
+
+const nodes: Record<string, unknown>[] = [organization, website];
+if (includeSoftware) nodes.push(application, sourceCode);
+if (blogPosting) nodes.push(blogPosting);
+
+const graph = { '@context': 'https://schema.org', '@graph': nodes };
 
 // Escaping `<` stops any future string containing "</script>" from closing the
 // element early. JSON.stringify alone does not do this.
