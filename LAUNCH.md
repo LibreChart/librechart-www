@@ -50,8 +50,8 @@ most of it waiting for DNS.
 - [x] **A8** Email Routing enabled — apex MX (`route1/2/3.mx.cloudflare.net`)
       and apex SPF confirmed on 1.1.1.1 and 8.8.8.8. Resend's `send.` records
       are unaffected.
-- [ ] **A8b** ⚠️ **Send a test email to `hello@librechart.org` and confirm it
-      arrives.** DNS only proves the domain was onboarded. It cannot show
+- [x] **A8b** Test email to `hello@librechart.org` sent and received —
+      destination verified and routing rule confirmed working. Previously: DNS only proves the domain was onboarded. It cannot show
       whether the destination inbox was verified or whether a routing rule
       exists — and a domain with correct MX records but no rule accepts mail
       and drops it silently. `CONTACT_TO` points here, so if this is wrong,
