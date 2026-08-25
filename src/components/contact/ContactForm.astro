@@ -6,7 +6,11 @@
  * except the Turnstile widget, which needs it. The <noscript> path offers a
  * mailto instead so nobody hits a dead end.
  */
-const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+// Read through astro:env, NOT import.meta.env. The latter is Vite's env - it
+// reads .env files and bypasses the schema in astro.config.mjs entirely,
+// including its default, so the attribute rendered empty in CI and the widget
+// silently never appeared. A local .env hid this during development.
+import { PUBLIC_TURNSTILE_SITE_KEY as siteKey } from 'astro:env/client';
 ---
 
 <form method="POST" action="/api/contact" class="contact-form">
