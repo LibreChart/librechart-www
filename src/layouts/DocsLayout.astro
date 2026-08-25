@@ -1,0 +1,19 @@
+---
+/** Layout for Markdown pages under /docs. Frontmatter arrives as `frontmatter`. */
+import PageLayout from './PageLayout.astro';
+import '../styles/prose.css';
+
+const { frontmatter } = Astro.props;
+const { title, description, heading, lede } = frontmatter;
+---
+
+<PageLayout
+  title={`${title} — LibreChart`}
+  description={description}
+  heading={heading ?? title}
+  lede={lede}
+>
+  <div class="prose">
+    <slot />
+  </div>
+</PageLayout>

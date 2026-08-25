@@ -67,6 +67,14 @@ export default defineConfig({
     },
   },
 
+  markdown: {
+    // Syntax highlighting is OFF deliberately. Astro's default highlighter
+    // (Shiki) colours tokens with inline style attributes, which cannot be
+    // hashed and are therefore blocked by the CSP configured below. Code
+    // blocks are styled by src/styles/prose.css instead.
+    syntaxHighlight: false,
+  },
+
   prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
 
   env: {

@@ -484,10 +484,10 @@ build error or a console warning. `scripts/compare.sh` caught all three.
 
 ## Still to do
 
-- **B6** — contact form. Needs the A4/A5/A7 keys. `frame-src`/`script-src`
+- ~~**B6** — contact form.~~ Done.
+- ~~**`/docs/getting-started`**~~ Done; the Docs nav link now points at it.
+- **B6 (original note)** — contact form. Needs the A4/A5/A7 keys. `frame-src`/`script-src`
   already allow `challenges.cloudflare.com`.
-- **`/docs/getting-started`** — the header's "Docs" link currently points at the
-  GitHub README.
 - **Blog posts are `draft: true`.** Two seed posts are written but unpublished:
   they are drafts under Aaron's byline making factual claims about a real
   mission, so they need his review before `draft: false`.
