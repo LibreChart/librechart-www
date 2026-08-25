@@ -41,3 +41,8 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Launching
+
+See [LAUNCH.md](LAUNCH.md) for the ordered checklist of what is left to get
+librechart.org live, and which steps need a Cloudflare account rather than code.
