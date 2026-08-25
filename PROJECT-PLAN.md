@@ -217,7 +217,8 @@ submitter directly via `reply_to`, not through either system.
 ### A9 · Hardening and analytics
 1. **Security → WAF → Rate limiting rule**: `POST /api/contact`, 5 requests / 10 min / IP. The free plan allows exactly one rule — this is the right one to spend it on.
 2. **Web Analytics** → add `librechart.org` → hand me the beacon token.
-3. Confirm **github.com/LibreChart/LibreChart is public**. The homepage links to it as the primary CTA; a 404 there is worse than no link.
+3. ~~Confirm **github.com/LibreChart/LibreChart is public**.~~ Done - public,
+   default branch `main`.
 
 ### What I need back from you
 
@@ -424,7 +425,8 @@ Finally: Turnstile renders with the production sitekey on a hostname matching it
 ## Open items
 
 - **Domain availability is unverified** — checked live at A2. A different final string means updating `astro.config.mjs`, `wrangler.jsonc`, and the Resend sender.
-- **Confirm `LibreChart/LibreChart` is public** (A9.3). It's the homepage's primary CTA.
+- ~~**Confirm `LibreChart/LibreChart` is public**~~ Confirmed public, default
+  branch `main`, GPL-2.0 detected by GitHub. All published links verified 200.
 - **Real screenshots.** The homepage uses a hand-built HTML mockup of the chart UI, which is fine in context. Real de-identified captures would be stronger but need a demo instance — Tier 2, and a prerequisite for any dedicated `/screenshots` page.
 - **Resend API key exposure — accepted, closed.** The key was pasted into a
   chat transcript and the decision was to keep it rather than rotate. Recorded
