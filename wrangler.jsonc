@@ -2,18 +2,17 @@
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"name": "librechart-www",
 	"compatibility_date": "2026-08-24",
-	"compatibility_flags": ["global_fetch_strictly_public"],
-
+	"compatibility_flags": [
+		"global_fetch_strictly_public"
+	],
 	// Resolved from the adapter package, NOT ./dist/_worker.js/index.js.
 	"main": "@astrojs/cloudflare/entrypoints/server",
-
 	// No *.workers.dev URL. The first deploy has to happen before secrets can be
 	// set (secrets attach to an existing Worker), and without this that first
 	// deploy would publish a publicly reachable site whose contact form is
 	// broken. With it, the Worker exists but is unreachable until a custom
 	// domain is attached in Phase 4. Flip to true if you want a preview URL.
 	"workers_dev": false,
-
 	"assets": {
 		"directory": "./dist",
 		"binding": "ASSETS",
@@ -22,22 +21,24 @@
 		// Serve the built 404.astro rather than a bare Workers error.
 		"not_found_handling": "404-page"
 	},
-
 	"observability": {
 		"enabled": true
 	},
-
 	"vars": {
 		// Must be on the Resend-verified domain. Using the submitter's address
 		// here would fail DMARC and land the mail in spam.
 		"CONTACT_FROM": "LibreChart <site@librechart.org>",
-
 		// Delivered via Cloudflare Email Routing, which forwards this address
 		// to a real inbox. Email Routing's MX and SPF records sit on the apex;
 		// Resend's sit on the `send` subdomain, so the two do not collide.
 		"CONTACT_TO": "hello@librechart.org"
-	}
-
+	},
+	"kv_namespaces": [
+		{
+			"binding": "CONTACT_KV",
+			"id": "0fa83d92af074dd697f177b9b3befaf0"
+		}
+	]
 	// DEFERRED — do not uncomment until the referenced step is done:
 	//
 	// B6 — contact form config:
@@ -52,10 +53,11 @@
 	//   { "binding": "CONTACT_KV", "id": "<from A7>" }
 	// ],
 	//
-	// A8 — custom domains. These fail to deploy until the zone is in the
-	// account, so they are added only after the domain is registered:
-	// "routes": [
-	//   { "pattern": "librechart.org", "custom_domain": true },
-	//   { "pattern": "www.librechart.org", "custom_domain": true }
-	// ]
+	// Custom domains, declared here rather than clicked in the dashboard so the
+	// live hostnames are version-controlled and reproducible. `wrangler deploy`
+	// creates the DNS record and certificate for each.
+	"routes": [
+		{ "pattern": "librechart.org", "custom_domain": true },
+		{ "pattern": "www.librechart.org", "custom_domain": true }
+	]
 }
