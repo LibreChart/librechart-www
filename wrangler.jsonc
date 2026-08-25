@@ -1,6 +1,10 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
-	"name": "librechart-www",
+	// MUST match the Worker that Workers Builds actually deploys to. The repo is
+	// librechart-www but the Worker is "librechart", and while these disagreed
+	// every `wrangler secret put` silently targeted a Worker that did not exist,
+	// so the live site had no secrets and Turnstile verification always failed.
+	"name": "librechart",
 	"compatibility_date": "2026-08-24",
 	"compatibility_flags": [
 		"global_fetch_strictly_public"
