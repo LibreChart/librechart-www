@@ -25,12 +25,20 @@
       <div class="emr">
         <div class="emr-topbar">
           <span class="emr-brand">
+            <!-- Reversed mark on the app top bar. -->
             <svg class="logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-              <rect x="33" y="11" width="15" height="8" rx="2.5" fill="#fff" opacity=".9"/>
-              <rect x="10" y="16" width="44" height="33" rx="5.5" fill="#fff" opacity=".9"/>
-              <path d="M2 32 H19.5 L22.5 32 L25 28.2 L27 32 L29.5 32 L31 37.5 L33.2 19 L35.4 40 L37 32 L40 32 L42.5 27.5 L45 32 H62"
-                    fill="none" stroke="#0E8C7F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+        <defs>
+          <mask id="ecg-knockout-emr">
+            <rect x="0" y="0" width="64" height="64" fill="#FFFFFF"/>
+            <path d="M4 33 H21 L23 30.5 L25 33 H29 L30.5 36.5 L32 17 L33.5 41 L35 33 H38 L40 29 L42 33 H60" fill="none" stroke="#000000" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </mask>
+        </defs>
+        <g fill="#FFFFFF" mask="url(#ecg-knockout-emr)">
+          <rect x="13" y="10" width="16" height="9" rx="2.5"/>
+          <rect x="10" y="16" width="44" height="34" rx="6"/>
+        </g>
+        <path d="M4 33 H21 L23 30.5 L25 33 H29 L30.5 36.5 L32 17 L33.5 41 L35 33 H38 L40 29 L42 33 H60" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
             <span class="wm"><span>Libre</span><b>Chart</b></span>
           </span>
           <span class="emr-station">Station: Consult</span>

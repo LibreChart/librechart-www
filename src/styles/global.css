@@ -86,24 +86,27 @@ section{padding:84px 0}
 .section-head h2{font-size:clamp(1.9rem,3.6vw,2.6rem);font-weight:700;letter-spacing:-.01em}
 .section-head p{color:var(--muted);margin-top:16px;font-size:1.1rem}
 
-/* CASCADE TRAP - read before extracting another component.
-   Several elements carry `.wrap` alongside a block class:
+/* GUTTER RULE - applies to every class used alongside .wrap:
    .nav-inner .hero-inner .product-grid .community-inner .footer-inner .footer-bottom
-   At <=480px the global `.wrap{padding:0 18px}` is meant to win on source order,
-   both selectors being 0-1-0. Moving a `padding` declaration for one of those
-   classes into a component's scoped <style> rewrites it as `.x.astro-HASH`
-   (0-2-0), which beats `.wrap` and strips the side gutters on phones.
-   So: padding for any .wrap-combined class stays HERE. Only layout properties
-   (display/grid/flex/gap) are safe to scope. .hero-inner is the one still
-   pending - it has `padding:88px 0 96px` and the same exposure. */
-.hero-inner{padding:88px 0 96px}
-.footer-inner{padding:64px 0 44px}
-.footer-bottom{padding:22px 0 40px}
+
+   Use `padding-block`, NEVER the `padding` shorthand. Both selectors are 0-1-0,
+   and these rules come after `.wrap{padding:0 24px}` in source order, so a
+   shorthand silently zeroes the horizontal gutters - the footer sat flush
+   against the viewport edge at every width up to 1200px, and the hero headline
+   did the same between roughly 540 and 780px.
+
+   The same shorthand is also what makes scoping these into a component
+   dangerous: scoped, `.x` becomes `.x.astro-HASH` (0-2-0) and beats `.wrap`
+   even where source order would not. padding-block sidesteps both problems, so
+   these rules are now safe to move into their components if that ever helps. */
+.hero-inner{padding-block:88px 96px}
+.footer-inner{padding-block:64px 44px}
+.footer-bottom{padding-block:22px 40px}
 
 /* ---------- Responsive ---------- */
 @media (max-width:560px){
   section{padding:60px 0}
-  .hero-inner{padding:60px 0 68px}
+  .hero-inner{padding-block:60px 68px}
   .hero-ctas .btn,.community-ctas .btn{flex:1 1 auto;justify-content:center}
 }
 @media (max-width:480px){

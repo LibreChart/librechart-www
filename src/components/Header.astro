@@ -14,12 +14,19 @@
 <header class="nav" id="siteNav">
   <div class="wrap nav-inner">
     <a class="logo-lockup" href="/" aria-label="LibreChart home">
-      <!-- LibreChart mark: Chart Blue patient-chart card with tab corner, crossed by a continuous Vital Teal ECG trace running past the card edges -->
+      <!-- Mono mark: ECG trace knocked out of a solid Ink card. Ink on the light nav. -->
       <svg class="logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LibreChart mark">
-        <rect x="33" y="11" width="15" height="8" rx="2.5" fill="#155B8B"/>
-        <rect x="10" y="16" width="44" height="33" rx="5.5" fill="#155B8B"/>
-        <path d="M2 32 H19.5 L22.5 32 L25 28.2 L27 32 L29.5 32 L31 37.5 L33.2 19 L35.4 40 L37 32 L40 32 L42.5 27.5 L45 32 H62"
-              fill="none" stroke="#0E8C7F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <mask id="ecg-knockout-nav">
+            <rect x="0" y="0" width="64" height="64" fill="#FFFFFF"/>
+            <path d="M4 33 H21 L23 30.5 L25 33 H29 L30.5 36.5 L32 17 L33.5 41 L35 33 H38 L40 29 L42 33 H60" fill="none" stroke="#000000" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </mask>
+        </defs>
+        <g fill="#14283C" mask="url(#ecg-knockout-nav)">
+          <rect x="13" y="10" width="16" height="9" rx="2.5"/>
+          <rect x="10" y="16" width="44" height="34" rx="6"/>
+        </g>
+        <path d="M4 33 H21 L23 30.5 L25 33 H29 L30.5 36.5 L32 17 L33.5 41 L35 33 H38 L40 29 L42 33 H60" fill="none" stroke="#14283C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <span class="wordmark"><span class="w-libre">Libre</span><span class="w-chart">Chart</span></span>
     </a>
