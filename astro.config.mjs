@@ -107,7 +107,11 @@ export default defineConfig({
       PUBLIC_GA_MEASUREMENT_ID: envField.string({
         context: 'client',
         access: 'public',
-        optional: true,
+        // Committed as a default rather than supplied as a Workers Builds
+        // build variable. It is public either way - it ships in the HTML - and
+        // a build variable is exactly how the Turnstile site key silently went
+        // missing, producing a page that looked fine and did nothing.
+        default: 'G-TNEDNVXFBJ',
       }),
 
       TURNSTILE_SECRET_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),

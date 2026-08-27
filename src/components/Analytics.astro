@@ -11,11 +11,15 @@
  */
 import { PUBLIC_GA_MEASUREMENT_ID as gaId } from 'astro:env/client';
 
-const loader = gaId ? `https://www.googletagmanager.com/gtag/js?id=${gaId}` : null;
+// Production builds only. The ID now has a default so it is always present,
+// and without this guard `astro dev` would report local traffic into the real
+// property, polluting it with our own page views.
+const enabled = Boolean(gaId) && import.meta.env.PROD;
+const loader = enabled ? `https://www.googletagmanager.com/gtag/js?id=${gaId}` : null;
 ---
 
 {
-  gaId && (
+  enabled && (
     <>
       <meta name="ga-measurement-id" content={gaId} />
       <script async src={loader}></script>
