@@ -51,10 +51,11 @@ export default defineConfig({
       algorithm: 'SHA-256',
       directives: [
         "default-src 'self'",
-        "img-src 'self' data:",
+        // GA delivers some hits as image pixels.
+        "img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com",
         "font-src 'self'",
         // Turnstile XHRs to challenges.cloudflare.com, so 'self' alone breaks it.
-        "connect-src 'self' https://challenges.cloudflare.com",
+        "connect-src 'self' https://challenges.cloudflare.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
         "form-action 'self'",
         "base-uri 'self'",
         "object-src 'none'",
@@ -62,7 +63,13 @@ export default defineConfig({
         'frame-src https://challenges.cloudflare.com',
       ],
       scriptDirective: {
-        resources: ["'self'", 'https://challenges.cloudflare.com'],
+        // gtag.js loads from googletagmanager. Without it here the CSP blocks
+        // the script and GA fails silently - no data, and no error page.
+        resources: [
+          "'self'",
+          'https://challenges.cloudflare.com',
+          'https://www.googletagmanager.com',
+        ],
       },
     },
   },
@@ -93,6 +100,16 @@ export default defineConfig({
       }),
 
       // Secrets. Never in the repo - set with `wrangler secret put`.
+      // Google Analytics 4 measurement ID (G-XXXXXXXXXX). Public by design -
+      // it ships in the HTML. Optional: with it unset, Analytics.astro renders
+      // nothing, so builds work before the property exists and local dev never
+      // pollutes the property with your own traffic.
+      PUBLIC_GA_MEASUREMENT_ID: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
+
       TURNSTILE_SECRET_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       RESEND_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
 

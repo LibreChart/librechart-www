@@ -1,0 +1,35 @@
+---
+/**
+ * Google Analytics 4.
+ *
+ * Renders nothing unless PUBLIC_GA_MEASUREMENT_ID is set, so builds and local
+ * development work with no GA property and no traffic is recorded from dev.
+ *
+ * The config script is deliberately static rather than interpolated, so Astro
+ * bundles it to a file served from 'self'. An interpolated inline script would
+ * need its own CSP hash. The measurement ID reaches it through a meta tag.
+ */
+import { PUBLIC_GA_MEASUREMENT_ID as gaId } from 'astro:env/client';
+
+const loader = gaId ? `https://www.googletagmanager.com/gtag/js?id=${gaId}` : null;
+---
+
+{
+  gaId && (
+    <>
+      <meta name="ga-measurement-id" content={gaId} />
+      <script async src={loader}></script>
+      <script>
+        const el = document.querySelector('meta[name="ga-measurement-id"]');
+        const id = el && el.getAttribute('content');
+        if (id) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { window.dataLayer.push(arguments); }
+          window.gtag = gtag;
+          gtag('js', new Date());
+          gtag('config', id);
+        }
+      </script>
+    </>
+  )
+}
